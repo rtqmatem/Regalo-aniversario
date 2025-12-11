@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Operación Costa del Sol — Escape Room para Mª Carmen</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ff7a7a;--muted:#aab3c1;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6;background:linear-gradient(180deg,#071126 0%, #0b2236 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .wrap{width:100%;max-width:920px}
+    .card{background:var(--card);border-radius:14px;padding:28px;box-shadow:0 10px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px);}
+    h1{margin:0 0 8px;font-size:26px}
+    p.lead{margin:6px 0 18px;color:var(--muted)}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    button{background:linear-gradient(90deg,var(--accent),#ffb4b4);border:none;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .screen{display:none}
+    .screen.active{display:block}
+    .box{background:var(--glass);padding:18px;border-radius:10px;margin-top:12px}
+    label{display:block;margin-bottom:6px;color:var(--muted)}
+    input[type=text], input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:#e6eef6}
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .choice{padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid transparent}
+    .choice:hover{border-color:rgba(255,255,255,0.05)}
+    .hint{font-size:13px;color:#9fb2c9;margin-top:8px}
+    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--muted);font-size:13px}
+    .small{font-size:12px;color:#9fb2c9}
+    .center{text-align:center}
+    .reveal{background:linear-gradient(90deg,#ffe2e2,#fff9f0);color:#2b2b2b;padding:18px;border-radius:12px}
+    .hotel-img{width:100%;height:200px;background:linear-gradient(90deg,#cfe9ff,#fbe7ff);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#123;margin:14px 0}
+    @media (max-width:560px){.choices{grid-template-columns:1fr}.card{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Escape room para Mª Carmen">
+
+      <!-- SCREEN 1: COVER -->
+      <section id="cover" class="screen active">
+        <h1>🎁 Operación Aniversario</h1>
+        <p class="lead">Mª Carmen — ¡feliz aniversario! Tu regalo ha sido escondido por una misteriosa orden. Resuelve las pruebas para recuperarlo.</p>
+        <div class="box">
+          <p>La misión combina momentos divertidos, pistas románticas y un pequeño toque misterioso. ¿Preparada?</p>
+          <div class="actions">
+            <button id="startBtn">Comenzar misión</button>
+            <button class="ghost" id="howBtn">Cómo funciona</button>
+          </div>
+        </div>
+        <div class="hint small">Consejo: guarda las pistas; al final necesitarás recordarlas todas.</div>
+      </section>
+
+      <!-- SCREEN 2: HOW -->
+      <section id="how" class="screen">
+        <h1>Cómo funciona</h1>
+        <p class="lead">Responde las preguntas o resuelve los acertijos para desbloquear la siguiente pista. Introduce las respuestas exactamente como aparecen (sin tildes, si lo prefieres).</p>
+        <div class="box">
+          <ol>
+            <li>Prueba 1: elección personal (piensa bien lo que eliges...)</li>
+            <li>Prueba 2: pequeño reto numérico</li>
+            <li>Prueba 3: frase romántica incompleta</li>
+            <li>Prueba 4: combina las pistas para nombrar el lugar final</li>
+          </ol>
+          <div class="actions">
+            <button id="backToCover">Volver</button>
+            <button id="goto1">Ir a la primera prueba</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: PUZZLE 1 (Multiple choice) -->
+      <section id="p1" class="screen">
+        <h1>Prueba 1 — ¿Cuánto me conoces?</h1>
+        <p class="lead">Selecciona la opción que mejor describe algo que hago y que te desespera (pero aún así me quieres). ¡Es un test de pareja!)</p>
+        <div class="box">
+          <div class="choices" id="choicesP1">
+            <div class="choice" data-val="1">1 — Dejar las llaves en cualquier sitio</div>
+            <div class="choice" data-val="2">2 — Apagar el brasero cuando no hay nadie en la habitación</div>
+            <div class="choice" data-val="3">3 — Hacer chistes malos y tonterías,... y llevarlos hasta el extremo</div>
+            <div class="choice" data-val="4">4 — Cantar cuando no toca</div>
+          </div>
+          <div class="hint">(Puede haber varias cosas que te desesperen, pero solo una es la respuesta correcta...)</div>
+          <div class="actions">
+            <button id="p1Check">Enviar respuesta</button>
+            <button class="ghost" id="p1Skip">Saltar (no recomendado)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: PUZZLE 2 (Numeric) -->
+      <section id="p2" class="screen">
+        <h1>Prueba 2 — La caja cerrada</h1>
+        <p class="lead">Una nota dice: "Tres números guardan la llave del descanso perfecto". Resuelve la adivinanza y escribe el número.</p>
+        <div class="box">
+          <p class="small">Adivinanza:</p>
+          <blockquote>Si en lugar de años contáramos días, y en lugar de un aniversario contáramos semanas... ¿Cuántas semanas cumples en este aniversario?</blockquote>
+          <label for="p2input">Introduce el número:</label>
+          <input id="p2input" type="number" placeholder="ej. 52" />
+          <div class="actions">
+            <button id="p2Check">Comprobar</button>
+            <button class="ghost" id="p2Back">Volver a la prueba anterior</button>
+          </div>
+          <div id="p2msg" class="hint"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: PUZZLE 3 (Fill phrase) -->
+      <section id="p3" class="screen">
+        <h1>Prueba 3 — La frase incompleta</h1>
+        <p class="lead">Completa la frase y escribe la letra (A, B, C o D) correspondiente a la opción que mejor encaja.</p>
+        <div class="box">
+          <p>"Lo mejor de cada viaje es..."</p>
+          <ol>
+            <li>A) "Que tú lleves el GPS, porque yo me pierdo."</li>
+            <li>B) "Compartirlo contigo, siempre."</li>
+            <li>C) "La cama del hotel."</li>
+            <li>D) "El desayuno buffet."</li>
+          </ol>
+          <label for="p3input">Letra respuesta:</label>
+          <input id="p3input" type="text" maxlength="1" placeholder="A, B, C o D" />
+          <div class="actions">
+            <button id="p3Check">Enviar</button>
+            <button class="ghost" id="p3Back">Volver</button>
+          </div>
+          <div id="p3msg" class="hint"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: PUZZLE 4 (Combine clues) -->
+      <section id="p4" class="screen">
+        <h1>Prueba 4 — Encuentra el lugar</h1>
+        <p class="lead">Reúne las pistas:</p>
+        <ul>
+          <li>Un lugar donde el cielo y la arena se llevan bien</li>
+          <li>No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!</li>
+          <li>Cánovas del Castillo descansaría muy bien cerquita del muelle (pero no el de San Blas)</li>
+        </ul>
+        <div class="box">
+          <label for="p4input">Escribe el nombre del lugar:</label>
+          <input id="p4input" type="text" placeholder="Ejemplo: Hotel El Mirador" />
+          <div class="actions">
+            <button id="p4Check">Comprobar lugar</button>
+            <button class="ghost" id="p4Back">Volver</button>
+          </div>
+          <div id="p4msg" class="hint"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 7: REVEAL -->
+      <section id="final" class="screen">
+        <h1>🎉 ¡Misión cumplida!</h1>
+        <p class="lead">Enhorabuena, Mª Carmen. Has recuperado el regalo!!!.</p>
+        <div class="box reveal center">
+          <div class="hotel-img">
+		<img src="https://media-cdn.tripadvisor.com/media/photo-s/10/6e/bd/01/hotel.jpg" alt=Hotel MS Maestranza style="width:100%; height:100%; object-fit:cover;border-radius:10px;" </div>
+          <h2>Una noche para dos en Málaga</h2>
+          <p class="small">Hotel: <strong>MS Maestranza</strong></p>
+          <p>Preparad las maletas: una noche en Málaga para descansar, pasear y celebrarlo juntos.</p>
+         
+        </div>
+        <div class="footer">
+          <div>Creado especialmente para <strong>Mª Carmen — ¡FELICIDADES!</strong></div>
+          <div class="small">Feliz aniversario ❤️</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // Configuration: answers. Change these values if you want different correct answers.
+    const config = {
+      p1Correct: '3',        // option value for puzzle 1
+      p2Correct: 832,         // numeric for puzzle 2
+      p3Correct: 'B',        // letter for puzzle 3
+      p4CorrectVariants: ['ms maestranza','msmaestranza','hotel ms maestranza','maestranza', ,'hotel maestranza','Málaga','Malaga','malaga','málaga']
+    };
+
+    // Simple navigation
+    function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+
+    document.getElementById('startBtn').addEventListener('click',()=>show('p1'))
+    document.getElementById('howBtn').addEventListener('click',()=>show('how'))
+    document.getElementById('backToCover').addEventListener('click',()=>show('cover'))
+    document.getElementById('goto1').addEventListener('click',()=>show('p1'))
+
+    // P1
+    let p1choice = null
+    document.querySelectorAll('#choicesP1 .choice').forEach(el=>el.addEventListener('click',()=>{document.querySelectorAll('#choicesP1 .choice').forEach(c=>c.style.borderColor='transparent');el.style.borderColor='rgba(255,255,255,0.12)';p1choice=el.getAttribute('data-val')}))
+    document.getElementById('p1Check').addEventListener('click',()=>{
+      if(!p1choice){alert('Selecciona una opción antes de enviar.');return}
+      if(p1choice===config.p1Correct){alert('¡Respuesta correcta! Has obtenido la pista: "El regalo está en un lugar donde el cielo y la arena se llevan bien..."');show('p2')}else{alert('No es la opción correcta. Repítelo :)')}
+    })
+    document.getElementById('p1Skip').addEventListener('click',()=>{if(confirm('¿Seguro que quieres saltar esta prueba?')) show('p2')})
+
+    // P2
+    document.getElementById('p2Check').addEventListener('click',()=>{
+      const val = Number(document.getElementById('p2input').value)
+      const msg = document.getElementById('p2msg')
+      if(!val){msg.textContent='Introduce un número válido';return}
+      if(val===config.p2Correct){msg.textContent='¡Correcto! Pista: "No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!"';setTimeout(()=>show('p3'),800)}else{msg.textContent='No coincide. Intenta de nuevo.'}
+    })
+    document.getElementById('p2Back').addEventListener('click',()=>show('p1'))
+
+    // P3
+    document.getElementById('p3Check').addEventListener('click',()=>{
+      const val = (document.getElementById('p3input').value||'').toUpperCase().trim()
+      const msg = document.getElementById('p3msg')
+      if(!val || !['A','B','C','D'].includes(val)){msg.textContent='Introduce A, B, C o D';return}
+      if(val===config.p3Correct){msg.textContent='Respuesta perfecta. Pista: "Cánovas del Castillo descansaría muy bien cerquita del muelle (pero no el de San Blas)"';setTimeout(()=>show('p4'),900)}else{msg.textContent='¿En serio? ¿Eso es lo mejor de un viaje? Piénsalo mejor...'}
+    })
+    document.getElementById('p3Back').addEventListener('click',()=>show('p2'))
+
+    // P4
+    document.getElementById('p4Check').addEventListener('click',()=>{
+      const raw = (document.getElementById('p4input').value||'').toLowerCase().replace(/[\s,\.]/g,'')
+      const msg = document.getElementById('p4msg')
+      if(!raw){msg.textContent='Escribe un nombre de lugar';return}
+      const ok = config.p4CorrectVariants.some(v=>raw.includes(v.replace(/\s/g,'')))
+      if(ok){msg.textContent='¡Correcto! Accediendo al regalo…';setTimeout(()=>show('final'),900)}else{msg.textContent='No parece ser ese el lugar. Revisa las pistas.'}
+    })
+    document.getElementById('p4Back').addEventListener('click',()=>show('p3'))
+
+    // Final buttons (placeholders)
+    document.getElementById('pdfBtn').addEventListener('click',()=>{
+      alert('Aquí puedes enlazar el PDF con la reserva. Reemplaza esta acción con el enlace al documento real.');
+    })
+    document.getElementById('videoBtn').addEventListener('click',()=>{
+      alert('Aquí puedes mostrar un video o mensaje personal. Sustitúyelo por el archivo de video o enlace.');
+    })
+
+    // Accessibility: allow Enter to submit in inputs
+    document.querySelectorAll('input').forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault(); const parent = inp.closest('.screen'); if(parent && parent.id==='p2') document.getElementById('p2Check').click(); if(parent && parent.id==='p3') document.getElementById('p3Check').click(); if(parent && parent.id==='p4') document.getElementById('p4Check').click()} }))
+  </script>
+</body>
+</html>
