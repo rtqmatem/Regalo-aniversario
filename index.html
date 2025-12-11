@@ -204,7 +204,7 @@
       const val = Number(document.getElementById('p2input').value)
       const msg = document.getElementById('p2msg')
       if(!val){msg.textContent='Introduce un número válido';return}
-      if(val===config.p2Correct){msg.textContent='¡Correcto! Pista: "No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!"';setTimeout(()=>show('p3'),800)}else{msg.textContent='No coincide. Intenta de nuevo.'}
+      if(val===config.p2Correct){msg.textContent='¡Correcto! Pista: "No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!"';setTimeout(()=>show('p3'),800)}else{msg.textContent='Esa no es la respuesta correcta. A ver esas matemáticas...'}
     })
     document.getElementById('p2Back').addEventListener('click',()=>show('p1'))
 
