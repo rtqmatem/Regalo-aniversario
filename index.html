@@ -204,7 +204,7 @@
       const val = Number(document.getElementById('p2input').value)
       const msg = document.getElementById('p2msg')
       if(!val){msg.textContent='Introduce un número válido';return}
-      if(val===config.p2Correct){msg.textContent='¡Correcto! Pista: "No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!"';setTimeout(()=>show('p3'),800)}else{msg.textContent='Esa no es la respuesta correcta. A ver esas matemáticas...'}
+      if(val===config.p2Correct){msg.textContent='¡Correcto! Pista: "No vas a ir a Sevilla a torear, aunque su nombre te pueda recordar a esa ciudad ¡Olé!"';setTimeout(()=>show('p3'),5000)}else{msg.textContent='Esa no es la respuesta correcta. A ver esas matemáticas...'}
     })
     document.getElementById('p2Back').addEventListener('click',()=>show('p1'))
 
@@ -213,7 +213,7 @@
       const val = (document.getElementById('p3input').value||'').toUpperCase().trim()
       const msg = document.getElementById('p3msg')
       if(!val || !['A','B','C','D'].includes(val)){msg.textContent='Introduce A, B, C o D';return}
-      if(val===config.p3Correct){msg.textContent='Respuesta perfecta. Pista: "Cánovas del Castillo descansaría muy bien cerquita del muelle (pero no el de San Blas)"';setTimeout(()=>show('p4'),900)}else{msg.textContent='¿En serio? ¿Eso es lo mejor de un viaje? Piénsalo mejor...'}
+      if(val===config.p3Correct){msg.textContent='Respuesta perfecta. Pista: "Cánovas del Castillo descansaría muy bien cerquita del muelle (pero no el de San Blas)"';setTimeout(()=>show('p4'),5000)}else{msg.textContent='¿En serio? ¿Eso es lo mejor de un viaje? Piénsalo mejor...'}
     })
     document.getElementById('p3Back').addEventListener('click',()=>show('p2'))
 
